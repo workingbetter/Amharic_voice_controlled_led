@@ -25,14 +25,15 @@ def signal_handler(sig, frame):
 signal.signal(signal.SIGINT, signal_handler)
 
 if __name__ == '__main__':
-    try:
-        while True:
-            # Assume a command is passed as an argument when the script starts
+    while True:
+        try:
+            # Wait for a command input through the command-line argument
             if len(sys.argv) > 1:
                 command = sys.argv[1]  # Get the command from arguments
                 control_led(command)
+                sys.argv = []  # Clear the argument after processing
             else:
-                print("No command provided. Waiting for input...")
-                time.sleep(1)  # Sleep for a short period to avoid CPU overload
-    except KeyboardInterrupt:
-        signal_handler(None, None)  # Call the signal handler to clean up
+                time.sleep(1)  # Sleep to avoid high CPU usage when no command is given
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            time.sleep(1)  # Ensure we don't crash the script on error
