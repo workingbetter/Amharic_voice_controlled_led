@@ -1,21 +1,38 @@
 from gpiozero import LED
 import sys
+import signal
 import time
 
+# Initialize the LED (connected to GPIO pin 17)
+led = LED(17)
+
 def control_led(command):
-    led = LED(17)  # define LED pin according to BCM Numbering
-    if command == "በራ":
+    if command == "በራ":  # Amharic for "turn on"
         led.on()
-        print("LED turned on miki")
-    elif command == "ጠፋ":
+        print("LED turned on, Miki")
+    elif command == "ጠፋ":  # Amharic for "turn off"
         led.off()
         print("LED turned off")
     else:
         print("Unknown command")
-       
-    while True:
-        time.sleep(1)  # Delay to keep the script running
-       
+
+def signal_handler(sig, frame):
+    print("\nExiting gracefully...")
+    led.off()  # Ensure LED is off when exiting
+    sys.exit(0)
+
+# Set up signal handler for keyboard interrupt
+signal.signal(signal.SIGINT, signal_handler)
+
 if __name__ == '__main__':
-    command = sys.argv[1]  # Get the command from arguments
-    control_led(command)
+    try:
+        while True:
+            # Assume a command is passed as an argument when the script starts
+            if len(sys.argv) > 1:
+                command = sys.argv[1]  # Get the command from arguments
+                control_led(command)
+            else:
+                print("No command provided. Waiting for input...")
+                time.sleep(1)  # Sleep for a short period to avoid CPU overload
+    except KeyboardInterrupt:
+        signal_handler(None, None)  # Call the signal handler to clean up
