@@ -8,7 +8,7 @@ def control_led(command):
     if "አብሪው" in command:
         led.on()
         time.sleep(4)
-        print("LED turned on miki")
+        print("LED turned on")
         
     elif command == "ጠፋ":
         led.off()
