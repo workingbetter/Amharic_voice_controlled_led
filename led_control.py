@@ -5,9 +5,9 @@ led = LED(17)
 
 def control_led(command):
       # define LED pin according to BCM Numbering
-    if "አብሪው" in command:
+    if "አበበ" in command:
         led.on()
-        time.sleep(4)
+        time.sleep(8)
         print("LED turned on")
         
     elif command == "ጠፋ":
